@@ -1,0 +1,34 @@
+From 3a66facb8d0a68147729896e08083b8587b9c3f6 Mon Sep 17 00:00:00 2001
+From: Tosone <i@tosone.cn>
+Date: Sun, 5 Jan 2025 20:52:20 +0800
+Subject: [PATCH] update
+
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 740524475..bcc54cbfd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,7 +6,7 @@ include(${root}/deps/readies/cmake/main)
+ get_filename_component(binroot ${CMAKE_CURRENT_BINARY_DIR}/.. ABSOLUTE)
+ 
+ #----------------------------------------------------------------------------------------------
+-
++add_compile_options(-w)
+ option(BUILD_STATIC "Build a static library" OFF)
+ # BUILD_COORDINATOR
+ # BUILD_COORD_OSS
+@@ -139,7 +139,7 @@ else() # OSS RediSearch
+     target_link_libraries(redisearch VectorSimilarity ${CMAKE_LD_LIBS})
+ 
+     extract_debug_symbols(redisearch)
+-    
++
+     add_dependencies(redisearch VectorSimilarity)
+ endif()
+ 
+-- 
+2.47.1
+
