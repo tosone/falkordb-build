@@ -1,0 +1,28 @@
+From 5ed2f49130e216a46559d95afc5187f54dc7e987 Mon Sep 17 00:00:00 2001
+From: Tosone <i@tosone.cn>
+Date: Sun, 5 Jan 2025 22:49:20 +0800
+Subject: [PATCH 3/3] add more log
+
+---
+ src/module.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/module.c b/src/module.c
+index b70998b2c..6329a6a17 100644
+--- a/src/module.c
++++ b/src/module.c
+@@ -133,9 +133,10 @@ int RedisModule_OnLoad
+ 		return REDISMODULE_ERR;
+ 	}
+ 
+-	RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 136");
++	RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 136 %d", REDISEARCH_INIT_LIBRARY);
+ 
+ 	if(RediSearch_Init(ctx, REDISEARCH_INIT_LIBRARY) != REDISMODULE_OK) {
++		RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 139");
+ 		return REDISMODULE_ERR;
+ 	}
+ 
+-- 
+2.47.1
+

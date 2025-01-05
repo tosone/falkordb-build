@@ -2,6 +2,7 @@ FROM buildpack-deps:stable AS compiler
 
 COPY ./0001-fix-typo.patch .
 COPY ./0002-add-log.patch .
+COPY ./0003-add-more-log.patch .
 COPY ./0001-update.patch .
 
 RUN set -eux; \
@@ -14,7 +15,9 @@ RUN set -eux; \
   . $HOME/.cargo/env && \
   git clone --recurse-submodules -j8 https://github.com/FalkorDB/FalkorDB.git falkordb && \
   cd falkordb && patch -p1 < /0001-fix-typo.patch && patch -p1 < /0002-add-log.patch && \
-  cd deps/RediSearch && patch -p1 < /0001-update.patch && cd ../.. && make
+  patch -p1 < /0003-add-more-log.patch && \
+  cd deps/RediSearch && patch -p1 < /0001-update.patch && cd ../.. && \
+  make
 
 FROM redis:7.2.6
 

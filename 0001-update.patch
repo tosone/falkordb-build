@@ -1,11 +1,12 @@
-From 3a66facb8d0a68147729896e08083b8587b9c3f6 Mon Sep 17 00:00:00 2001
+From 8569eb3d09357ba43321e7ad18a59d6517b33a95 Mon Sep 17 00:00:00 2001
 From: Tosone <i@tosone.cn>
-Date: Sun, 5 Jan 2025 20:52:20 +0800
+Date: Sun, 5 Jan 2025 23:15:49 +0800
 Subject: [PATCH] update
 
 ---
- CMakeLists.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ CMakeLists.txt                | 4 ++--
+ src/module-init/module-init.c | 6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 740524475..bcc54cbfd 100644
@@ -29,6 +30,44 @@ index 740524475..bcc54cbfd 100644
      add_dependencies(redisearch VectorSimilarity)
  endif()
  
+diff --git a/src/module-init/module-init.c b/src/module-init/module-init.c
+index 929126074..cc532a2d1 100644
+--- a/src/module-init/module-init.c
++++ b/src/module-init/module-init.c
+@@ -165,7 +165,7 @@ RedisModuleCtx *RSDummyContext = NULL;
+ int RediSearch_Init(RedisModuleCtx *ctx, int mode) {
+ #define DO_LOG(...)                                 \
+   do {                                              \
+-    if (ctx && (mode != REDISEARCH_INIT_LIBRARY)) { \
++    if (ctx && (mode == REDISEARCH_INIT_LIBRARY)) { \
+       RedisModule_Log(ctx, ##__VA_ARGS__);          \
+     }                                               \
+   } while (false)
+@@ -174,6 +174,7 @@ int RediSearch_Init(RedisModuleCtx *ctx, int mode) {
+     return REDISMODULE_ERR;
+   }
+ 
++  RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 177");
+   // Print version string!
+   DO_LOG("notice", "RediSearch version %d.%d.%d (Git=%s)", REDISEARCH_VERSION_MAJOR,
+          REDISEARCH_VERSION_MINOR, REDISEARCH_VERSION_PATCH, RS_GetExtraVersion());
+@@ -187,6 +188,7 @@ int RediSearch_Init(RedisModuleCtx *ctx, int mode) {
+     }
+   }
+ 
++  RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 191");
+   if (mode == REDISEARCH_INIT_MODULE && initAsModule(ctx) != REDISMODULE_OK) {
+     return REDISMODULE_ERR;
+   } else if (mode == REDISEARCH_INIT_LIBRARY && initAsLibrary(ctx) != REDISMODULE_OK) {
+@@ -208,6 +210,8 @@ int RediSearch_Init(RedisModuleCtx *ctx, int mode) {
+ 
+   GC_ThreadPoolStart();
+ 
++  RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 213");
++
+   CleanPool_ThreadPoolStart();
+   // Init cursors mechanism
+   CursorList_Init(&RSCursors, false);
 -- 
 2.47.1
 
