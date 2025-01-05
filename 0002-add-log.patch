@@ -1,0 +1,74 @@
+From 506ca777b1084ea5e8675a4d7970f0fec5d64b8f Mon Sep 17 00:00:00 2001
+From: Tosone <i@tosone.cn>
+Date: Sun, 5 Jan 2025 12:32:25 +0800
+Subject: [PATCH 2/2] add log
+
+---
+ src/module.c      | 6 ++++++
+ src/redismodule.h | 5 +++--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/src/module.c b/src/module.c
+index dee98da90..b70998b2c 100644
+--- a/src/module.c
++++ b/src/module.c
+@@ -103,13 +103,17 @@ int RedisModule_OnLoad
+ ) {
+ 	if(RedisModule_Init(ctx, "graph", REDISGRAPH_MODULE_VERSION,
+ 						REDISMODULE_APIVER_1) == REDISMODULE_ERR) {
++		RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 106");
+ 		return REDISMODULE_ERR;
+ 	}
++	RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 108");
+ 
+ 	// initialize GraphBLAS
+ 	int res = GraphBLAS_Init(ctx);
+ 	if(res != REDISMODULE_OK) return res;
+ 
++	RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 115");
++
+ 	roaring_init_memory_hook((roaring_memory_t) {
+ 		.free           = rm_free,
+ 		.malloc         = rm_malloc,
+@@ -129,6 +133,8 @@ int RedisModule_OnLoad
+ 		return REDISMODULE_ERR;
+ 	}
+ 
++	RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 136");
++
+ 	if(RediSearch_Init(ctx, REDISEARCH_INIT_LIBRARY) != REDISMODULE_OK) {
+ 		return REDISMODULE_ERR;
+ 	}
+diff --git a/src/redismodule.h b/src/redismodule.h
+index 4378126e2..0830c7c39 100644
+--- a/src/redismodule.h
++++ b/src/redismodule.h
+@@ -41,7 +41,7 @@ typedef long long ustime_t;
+ /* API versions. */
+ #define REDISMODULE_APIVER_1 1
+ 
+-/* Version of the RedisModuleTypeMethods structure. Once the RedisModuleTypeMethods 
++/* Version of the RedisModuleTypeMethods structure. Once the RedisModuleTypeMethods
+  * structure is changed, this version number needs to be changed synchronistically. */
+ #define REDISMODULE_TYPE_METHOD_VERSION 5
+ 
+@@ -587,7 +587,7 @@ static const RedisModuleEvent
+     /* Deprecated since Redis 7.0, not used anymore. */
+     __attribute__ ((deprecated))
+     RedisModuleEvent_ReplBackup = {
+-        REDISMODULE_EVENT_REPL_BACKUP, 
++        REDISMODULE_EVENT_REPL_BACKUP,
+         1
+     },
+     RedisModuleEvent_ReplAsyncLoad = {
+@@ -1674,6 +1674,7 @@ static int RedisModule_Init(RedisModuleCtx *ctx, const char *name, int ver, int
+ 
+     if (RedisModule_IsModuleNameBusy && RedisModule_IsModuleNameBusy(name)) return REDISMODULE_ERR;
+     RedisModule_SetModuleAttribs(ctx,name,ver,apiver);
++    RedisModule_Log(ctx, "notice", "Starting up FalkorDB version 1677");
+     return REDISMODULE_OK;
+ }
+ 
+-- 
+2.47.1
+
